@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import my.movie.movieinfoservice.model.entity.Movie;
+import my.movie.movieinfoservice.model.entity.MovieSummary;
 
 @RestController
 @RequestMapping("/movies")
@@ -24,6 +25,8 @@ public class MovieController {
 
     @RequestMapping("/{movieId}")
     public Movie getMovie(@PathVariable("movieId") final String movieId) {
-        return new Movie("1", "Name1");
+        final MovieSummary movieSummary = restTemplate.getForObject("https://api.themoviedb.org/movie/" + movieId + "?api_key=" + apiKey, MovieSummary.class);
+
+        return new Movie(movieSummary.getMovieId(), movieSummary.getTitle());
     }
 }
